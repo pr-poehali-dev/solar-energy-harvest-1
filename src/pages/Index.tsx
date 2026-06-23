@@ -1,49 +1,52 @@
 import { useState } from "react";
 import {
-  Download,
-  Shield,
-  Zap,
-  Eye,
-  Clock,
-  Github,
   ArrowRight,
   Hash,
   Users,
-  Mic,
   Settings,
   Bell,
   Search,
   Menu,
   X,
-  Monitor,
 } from "lucide-react";
+import Icon from "@/components/ui/icon";
 import { Button } from "@/components/ui/button";
 
 const Index = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const [checkInput, setCheckInput] = useState("");
+  const [checkResult, setCheckResult] = useState<null | "ok" | "fail" | "loading">(null);
+
+  const handleCheck = () => {
+    if (!checkInput.trim()) return;
+    setCheckResult("loading");
+    setTimeout(() => {
+      setCheckResult(Math.random() > 0.4 ? "ok" : "fail");
+    }, 1400);
+  };
 
   return (
     <div className="min-h-screen bg-[#36393f] text-white overflow-x-hidden">
-      {/* Навигация в стиле Discord */}
+      {/* Навигация */}
       <nav className="bg-[#2f3136] border-b border-[#202225] px-4 sm:px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3 sm:gap-4">
             <div className="w-8 h-8 sm:w-10 sm:h-10 bg-[#5865f2] rounded-full flex items-center justify-center">
-              <Monitor className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+              <Icon name="BrainCircuit" size={20} className="text-white" />
             </div>
             <div>
-              <h1 className="text-lg sm:text-xl font-bold text-white">Дискордик</h1>
-              <p className="text-xs text-[#b9bbbe] hidden sm:block">Rich Presence для Figma в Discord</p>
+              <h1 className="text-lg sm:text-xl font-bold text-white">VeriDoc AI</h1>
+              <p className="text-xs text-[#b9bbbe] hidden sm:block">Автоматизированная ИИ-верификация по документам</p>
             </div>
           </div>
           <div className="hidden sm:flex items-center gap-4">
             <Button variant="ghost" className="text-[#b9bbbe] hover:text-white hover:bg-[#40444b]">
-              <Github className="w-4 h-4 mr-2" />
-              GitHub
+              <Icon name="BookOpen" size={16} className="mr-2" />
+              Документация
             </Button>
             <Button className="bg-[#5865f2] hover:bg-[#4752c4] text-white px-6 py-2 rounded text-sm font-medium">
-              Скачать
+              Запросить доступ
             </Button>
           </div>
           <Button
@@ -55,16 +58,15 @@ const Index = () => {
           </Button>
         </div>
 
-        {/* Мобильное меню */}
         {mobileMenuOpen && (
           <div className="sm:hidden mt-4 pt-4 border-t border-[#202225]">
             <div className="flex flex-col gap-3">
               <Button variant="ghost" className="text-[#b9bbbe] hover:text-white hover:bg-[#40444b] justify-start">
-                <Github className="w-4 h-4 mr-2" />
-                GitHub
+                <Icon name="BookOpen" size={16} className="mr-2" />
+                Документация
               </Button>
               <Button className="bg-[#5865f2] hover:bg-[#4752c4] text-white px-6 py-2 rounded text-sm font-medium">
-                Скачать
+                Запросить доступ
               </Button>
             </div>
           </div>
@@ -73,18 +75,24 @@ const Index = () => {
 
       {/* Макет в стиле Discord */}
       <div className="flex min-h-screen">
-        {/* Боковая панель серверов - скрыта на мобильных */}
+        {/* Боковая панель серверов */}
         <div className="hidden lg:flex w-[72px] bg-[#202225] flex-col items-center py-3 gap-2">
           <div className="w-12 h-12 bg-[#5865f2] rounded-2xl hover:rounded-xl transition-all duration-200 flex items-center justify-center cursor-pointer">
-            <Monitor className="w-6 h-6 text-white" />
+            <Icon name="BrainCircuit" size={24} className="text-white" />
           </div>
           <div className="w-8 h-[2px] bg-[#36393f] rounded-full"></div>
-          {[1, 2, 3, 4].map((i) => (
+          {[
+            { icon: "FileSearch", label: "Поиск" },
+            { icon: "ShieldCheck", label: "Проверка" },
+            { icon: "Database", label: "База" },
+            { icon: "BarChart2", label: "Отчёты" },
+          ].map((item, i) => (
             <div
               key={i}
-              className="w-12 h-12 bg-[#36393f] rounded-3xl hover:rounded-xl transition-all duration-200 flex items-center justify-center cursor-pointer hover:bg-[#5865f2]"
+              className="w-12 h-12 bg-[#36393f] rounded-3xl hover:rounded-xl transition-all duration-200 flex items-center justify-center cursor-pointer hover:bg-[#5865f2] group"
+              title={item.label}
             >
-              <span className="text-[#dcddde] text-sm font-medium">{i}</span>
+              <Icon name={item.icon} size={20} className="text-[#dcddde]" />
             </div>
           ))}
         </div>
@@ -92,11 +100,9 @@ const Index = () => {
         {/* Основной контент */}
         <div className="flex-1 flex flex-col lg:flex-row">
           {/* Боковая панель каналов */}
-          <div
-            className={`${mobileSidebarOpen ? "block" : "hidden"} lg:block w-full lg:w-60 bg-[#2f3136] flex flex-col`}
-          >
+          <div className={`${mobileSidebarOpen ? "block" : "hidden"} lg:block w-full lg:w-60 bg-[#2f3136] flex flex-col`}>
             <div className="p-4 border-b border-[#202225] flex items-center justify-between">
-              <h2 className="text-white font-semibold text-base">Сервер Дискордик</h2>
+              <h2 className="text-white font-semibold text-base">VeriDoc AI</h2>
               <Button
                 variant="ghost"
                 className="lg:hidden text-[#b9bbbe] hover:text-white hover:bg-[#40444b] p-1"
@@ -109,16 +115,25 @@ const Index = () => {
               <div className="mb-4">
                 <div className="flex items-center gap-1 px-2 py-1 text-[#8e9297] text-xs font-semibold uppercase tracking-wide">
                   <ArrowRight className="w-3 h-3" />
-                  <span>Текстовые каналы</span>
+                  <span>Рабочие модули</span>
                 </div>
                 <div className="mt-1 space-y-0.5">
-                  {["общий", "новости", "витрина", "помощь"].map((channel) => (
+                  {[
+                    { name: "верификация", active: true },
+                    { name: "загрузка-документов" },
+                    { name: "история-проверок" },
+                    { name: "отчёты" },
+                  ].map((channel) => (
                     <div
-                      key={channel}
-                      className="flex items-center gap-1.5 px-2 py-1 rounded text-[#8e9297] hover:text-[#dcddde] hover:bg-[#393c43] cursor-pointer"
+                      key={channel.name}
+                      className={`flex items-center gap-1.5 px-2 py-1 rounded cursor-pointer transition-colors ${
+                        channel.active
+                          ? "bg-[#393c43] text-[#dcddde]"
+                          : "text-[#8e9297] hover:text-[#dcddde] hover:bg-[#393c43]"
+                      }`}
                     >
                       <Hash className="w-4 h-4" />
-                      <span className="text-sm">{channel}</span>
+                      <span className="text-sm">{channel.name}</span>
                     </div>
                   ))}
                 </div>
@@ -126,34 +141,31 @@ const Index = () => {
               <div>
                 <div className="flex items-center gap-1 px-2 py-1 text-[#8e9297] text-xs font-semibold uppercase tracking-wide">
                   <ArrowRight className="w-3 h-3" />
-                  <span>Голосовые каналы</span>
+                  <span>Базы знаний</span>
                 </div>
                 <div className="mt-1 space-y-0.5">
-                  {["Общий", "Обзор дизайна"].map((channel) => (
+                  {["Нормативные акты", "Технические регламенты"].map((channel) => (
                     <div
                       key={channel}
                       className="flex items-center gap-1.5 px-2 py-1 rounded text-[#8e9297] hover:text-[#dcddde] hover:bg-[#393c43] cursor-pointer"
                     >
-                      <Mic className="w-4 h-4" />
+                      <Icon name="Database" size={16} />
                       <span className="text-sm">{channel}</span>
                     </div>
                   ))}
                 </div>
               </div>
             </div>
-            {/* Область пользователя */}
+            {/* Пользователь */}
             <div className="p-2 bg-[#292b2f] flex items-center gap-2">
               <div className="w-8 h-8 bg-[#5865f2] rounded-full flex items-center justify-center">
                 <span className="text-white text-sm font-medium">А</span>
               </div>
               <div className="flex-1 min-w-0">
-                <div className="text-white text-sm font-medium truncate">Алексей</div>
-                <div className="text-[#b9bbbe] text-xs truncate">#1234</div>
+                <div className="text-white text-sm font-medium truncate">Аналитик</div>
+                <div className="text-[#b9bbbe] text-xs truncate">онлайн</div>
               </div>
               <div className="flex gap-1">
-                <Button variant="ghost" size="sm" className="w-8 h-8 p-0 hover:bg-[#40444b]">
-                  <Mic className="w-4 h-4 text-[#b9bbbe]" />
-                </Button>
                 <Button variant="ghost" size="sm" className="w-8 h-8 p-0 hover:bg-[#40444b]">
                   <Settings className="w-4 h-4 text-[#b9bbbe]" />
                 </Button>
@@ -161,9 +173,9 @@ const Index = () => {
             </div>
           </div>
 
-          {/* Область чата */}
+          {/* Главная область */}
           <div className="flex-1 flex flex-col">
-            {/* Заголовок чата */}
+            {/* Заголовок канала */}
             <div className="h-12 bg-[#36393f] border-b border-[#202225] flex items-center px-4 gap-2">
               <Button
                 variant="ghost"
@@ -173,9 +185,9 @@ const Index = () => {
                 <Menu className="w-5 h-5" />
               </Button>
               <Hash className="w-5 h-5 text-[#8e9297]" />
-              <span className="text-white font-semibold">витрина</span>
+              <span className="text-white font-semibold">верификация</span>
               <div className="w-px h-6 bg-[#40444b] mx-2 hidden sm:block"></div>
-              <span className="text-[#8e9297] text-sm hidden sm:block">Показывай свою работу в Figma с Дискордик</span>
+              <span className="text-[#8e9297] text-sm hidden sm:block">Проверка строки на соответствие требованиям документов</span>
               <div className="ml-auto flex items-center gap-2 sm:gap-4">
                 <Bell className="w-4 h-4 sm:w-5 sm:h-5 text-[#b9bbbe] cursor-pointer hover:text-[#dcddde]" />
                 <Users className="w-4 h-4 sm:w-5 sm:h-5 text-[#b9bbbe] cursor-pointer hover:text-[#dcddde]" />
@@ -183,165 +195,157 @@ const Index = () => {
               </div>
             </div>
 
-            {/* Сообщения чата */}
+            {/* Контент */}
             <div className="flex-1 p-2 sm:p-4 space-y-4 sm:space-y-6 overflow-y-auto">
-              {/* Приветственное сообщение */}
+
+              {/* Приветственное сообщение от бота */}
               <div className="flex gap-2 sm:gap-4">
                 <div className="w-8 h-8 sm:w-10 sm:h-10 bg-[#5865f2] rounded-full flex items-center justify-center flex-shrink-0">
-                  <Monitor className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                  <Icon name="BrainCircuit" size={18} className="text-white" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-baseline gap-2 mb-1">
-                    <span className="text-white font-medium text-sm sm:text-base">Дискордик Бот</span>
+                    <span className="text-white font-medium text-sm sm:text-base">VeriDoc Bot</span>
                     <span className="bg-[#5865f2] text-white text-xs px-1 rounded">БОТ</span>
-                    <span className="text-[#72767d] text-xs hidden sm:inline">Сегодня в 12:00</span>
+                    <span className="text-[#72767d] text-xs hidden sm:inline">Сегодня в 09:00</span>
                   </div>
                   <div className="text-[#dcddde] text-sm sm:text-base">
                     <p className="mb-3 sm:mb-4">
-                      <strong>Добро пожаловать в Дискордик!</strong> Показывай свой прогресс в Figma прямо в Discord.
+                      <strong>Добро пожаловать в VeriDoc AI!</strong> Система автоматической верификации данных на основе RAG-агента и загруженных нормативных документов.
                     </p>
                     <div className="bg-[#2f3136] border-l-4 border-[#5865f2] p-3 sm:p-4 rounded">
-                      <h3 className="text-white font-semibold mb-2 text-sm sm:text-base">Что умеет Дискордик:</h3>
+                      <h3 className="text-white font-semibold mb-2 text-sm sm:text-base">Возможности системы:</h3>
                       <ul className="space-y-1 text-xs sm:text-sm text-[#b9bbbe]">
-                        <li>Автоматически определяет Figma в браузере и приложении</li>
-                        <li>Показывает название текущего проекта/файла</li>
-                        <li>Обновляется каждые 5 секунд в реальном времени</li>
-                        <li>Очищает статус при простое</li>
-                        <li>Работает на всех платформах</li>
+                        <li>📄 Загрузка нормативных документов и регламентов в базу знаний</li>
+                        <li>🔍 Анализ входящей строки RAG-агентом с поиском по документам</li>
+                        <li>✅ Верификация соответствия требованиям с обоснованием</li>
+                        <li>📊 Детальный отчёт с указанием нарушений и ссылок на нормы</li>
+                        <li>⚡ Ответ за секунды — без ручной проверки</li>
                       </ul>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Сообщение пользователя с Rich Presence */}
+              {/* Демо верификации */}
               <div className="flex gap-2 sm:gap-4">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center flex-shrink-0">
-                  <span className="text-white text-xs sm:text-sm font-medium">М</span>
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-baseline gap-2 mb-1">
-                    <span className="text-white font-medium text-sm sm:text-base">Мария Дизайнер</span>
-                    <span className="text-[#72767d] text-xs hidden sm:inline">Сегодня в 12:05</span>
-                  </div>
-                  <div className="text-[#dcddde] mb-3 text-sm sm:text-base">
-                    Только начала работу над новым дизайном лендинга!
-                  </div>
-
-                  {/* Демо Rich Presence */}
-                  <div className="bg-[#2f3136] border border-[#202225] rounded-lg overflow-hidden w-full max-w-sm">
-                    {/* Заголовок профиля */}
-                    <div className="h-16 sm:h-20 bg-gradient-to-r from-[#5865f2] to-[#7c3aed] relative">
-                      <div className="absolute -bottom-3 sm:-bottom-4 left-3 sm:left-4">
-                        <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border-4 border-[#2f3136] bg-[#36393f] overflow-hidden">
-                          <div className="w-full h-full bg-gradient-to-br from-[#4f46e5] to-[#7c3aed] flex items-center justify-center">
-                            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-[#2f3136] rounded-full flex items-center justify-center">
-                              <span className="text-lg sm:text-2xl">M</span>
-                            </div>
-                          </div>
-                          <div className="absolute -bottom-1 -right-1 w-5 h-5 sm:w-6 sm:h-6 bg-[#3ba55c] border-4 border-[#2f3136] rounded-full"></div>
-                        </div>
-                      </div>
-                      <Button
-                        size="sm"
-                        className="absolute top-2 sm:top-4 right-2 sm:right-4 bg-[#4f545c] hover:bg-[#5d6269] text-white text-xs px-2 sm:px-3 py-1 rounded"
-                      >
-                        <Settings className="w-3 h-3 mr-1" />
-                        <span className="hidden sm:inline">Профиль</span>
-                      </Button>
-                    </div>
-
-                    {/* Информация профиля */}
-                    <div className="pt-4 sm:pt-6 px-3 sm:px-4 pb-3 sm:pb-4">
-                      <div className="mb-3 sm:mb-4">
-                        <h3 className="text-white text-lg sm:text-xl font-bold mb-1">Мария</h3>
-                        <div className="flex items-center gap-2 text-[#b9bbbe] text-xs sm:text-sm">
-                          <span>maria_design</span>
-                          <span>-</span>
-                          <span>Она</span>
-                          <div className="flex gap-1 ml-2">
-                            <div className="w-3 h-3 sm:w-4 sm:h-4 bg-[#5865f2] rounded-sm"></div>
-                            <div className="w-3 h-3 sm:w-4 sm:h-4 bg-[#3ba55c] rounded-sm"></div>
-                            <div className="w-3 h-3 sm:w-4 sm:h-4 bg-[#faa61a] rounded-sm"></div>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Статусное сообщение */}
-                      <div className="mb-3 sm:mb-4">
-                        <div className="bg-[#36393f] rounded-lg p-2 sm:p-3 relative">
-                          <div className="absolute -top-2 left-3 sm:left-4 w-4 h-4 bg-[#36393f] rotate-45"></div>
-                          <div className="flex items-center gap-2 text-[#dcddde] text-xs sm:text-sm">
-                            <div className="w-3 h-3 sm:w-4 sm:h-4 bg-[#5865f2] rounded-full flex items-center justify-center">
-                              <span className="text-xs">*</span>
-                            </div>
-                            <span>Работаю над проектом...</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Вкладки */}
-                      <div className="flex border-b border-[#40444b] mb-3 sm:mb-4">
-                        <button className="px-3 sm:px-4 py-2 text-[#8e9297] text-xs sm:text-sm font-medium hover:text-[#dcddde]">
-                          Обо мне
-                        </button>
-                        <button className="px-3 sm:px-4 py-2 text-white text-xs sm:text-sm font-medium border-b-2 border-[#5865f2]">
-                          Активность
-                        </button>
-                      </div>
-
-                      {/* Активность Дискордик */}
-                      <div>
-                        <div className="flex items-center gap-2 text-[#8e9297] text-xs font-semibold uppercase tracking-wide mb-2 sm:mb-3">
-                          <span>Играет</span>
-                        </div>
-
-                        <div className="flex items-start gap-2 sm:gap-3 p-2 sm:p-3 bg-[#36393f] rounded-lg">
-                          {/* Логотип Figma */}
-                          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-[#ff7262] to-[#f24e1e] rounded-lg flex items-center justify-center flex-shrink-0">
-                            <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" viewBox="0 0 24 24" fill="currentColor">
-                              <path d="M15.852 8.981h-4.588V0h4.588c2.476 0 4.49 2.014 4.49 4.49s-2.014 4.491-4.49 4.491zM12.735 7.51h3.117c1.665 0 3.019-1.355 3.019-3.019s-1.354-3.019-3.019-3.019h-3.117V7.51zm0 1.471H8.148c-2.476 0-4.49-2.015-4.49-4.49S5.672 0 8.148 0h4.588v8.981zm-4.587-7.51c-1.665 0-3.019 1.355-3.019 3.019s1.354 3.02 3.019 3.02h3.117V1.471H8.148zm4.587 15.019H8.148c-2.476 0-4.49-2.014-4.49-4.49s2.014-4.49 4.49-4.49h4.588v8.98zM8.148 8.981c-1.665 0-3.019 1.355-3.019 3.019s1.355 3.019 3.019 3.019h3.117V8.981H8.148zM8.172 24c-2.489 0-4.515-2.014-4.515-4.49s2.014-4.49 4.49-4.49h4.588v4.441c0 2.503-2.047 4.539-4.563 4.539zm-.024-7.51a3.023 3.023 0 0 0-3.019 3.019c0 1.665 1.365 3.019 3.044 3.019 1.705 0 3.093-1.376 3.093-3.068v-2.97H8.148z" />
-                            </svg>
-                          </div>
-
-                          {/* Детали активности */}
-                          <div className="flex-1 min-w-0">
-                            <div className="text-white font-semibold text-xs sm:text-sm mb-1">Дискордик</div>
-                            <div className="text-[#dcddde] text-xs sm:text-sm mb-1">Работаю над логотипом</div>
-                            <div className="text-[#b9bbbe] text-xs sm:text-sm mb-2">Figma Desktop</div>
-                            <div className="flex items-center gap-2">
-                              <div className="w-2 h-2 bg-[#3ba55c] rounded-full animate-pulse"></div>
-                              <span className="text-[#3ba55c] text-xs font-medium">0:37 прошло</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Еще одно сообщение пользователя */}
-              <div className="flex gap-2 sm:gap-4">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-green-500 to-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full flex items-center justify-center flex-shrink-0">
                   <span className="text-white text-xs sm:text-sm font-medium">И</span>
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-baseline gap-2 mb-1">
-                    <span className="text-white font-medium text-sm sm:text-base">Иван UX</span>
-                    <span className="text-[#72767d] text-xs hidden sm:inline">Сегодня в 12:08</span>
+                    <span className="text-white font-medium text-sm sm:text-base">Инженер по качеству</span>
+                    <span className="text-[#72767d] text-xs hidden sm:inline">Сегодня в 09:12</span>
                   </div>
-                  <div className="text-[#dcddde] text-sm sm:text-base">
-                    Обожаю видеть прогресс всех! Дискордик делает общение таким удобным
+                  <div className="text-[#dcddde] mb-3 text-sm sm:text-base">
+                    Проверяю новую партию — загружаю строку на верификацию:
+                  </div>
+
+                  {/* Карточка верификации */}
+                  <div className="bg-[#2f3136] border border-[#202225] rounded-lg overflow-hidden w-full max-w-xl">
+                    <div className="h-2 bg-gradient-to-r from-[#5865f2] to-[#7c3aed]"></div>
+                    <div className="p-4 sm:p-5">
+                      <div className="flex items-center gap-2 mb-4">
+                        <Icon name="ScanSearch" size={18} className="text-[#5865f2]" />
+                        <span className="text-white font-semibold text-sm sm:text-base">Модуль верификации</span>
+                        <span className="ml-auto text-[#3ba55c] text-xs flex items-center gap-1">
+                          <span className="w-2 h-2 bg-[#3ba55c] rounded-full animate-pulse inline-block"></span>
+                          RAG-агент активен
+                        </span>
+                      </div>
+
+                      {/* Поле ввода */}
+                      <div className="mb-3">
+                        <label className="text-[#8e9297] text-xs font-semibold uppercase tracking-wide mb-2 block">
+                          Строка для проверки
+                        </label>
+                        <textarea
+                          className="w-full bg-[#40444b] border border-[#202225] rounded-lg px-3 py-2 text-[#dcddde] text-sm resize-none focus:outline-none focus:border-[#5865f2] transition-colors"
+                          rows={3}
+                          placeholder="Введите текст, данные или строку для верификации по требованиям документов..."
+                          value={checkInput}
+                          onChange={(e) => {
+                            setCheckInput(e.target.value);
+                            setCheckResult(null);
+                          }}
+                        />
+                      </div>
+
+                      <Button
+                        className="w-full bg-[#5865f2] hover:bg-[#4752c4] text-white rounded text-sm font-medium py-2 disabled:opacity-50"
+                        onClick={handleCheck}
+                        disabled={!checkInput.trim() || checkResult === "loading"}
+                      >
+                        {checkResult === "loading" ? (
+                          <span className="flex items-center gap-2 justify-center">
+                            <Icon name="Loader2" size={16} className="animate-spin" />
+                            Анализирую документы...
+                          </span>
+                        ) : (
+                          <span className="flex items-center gap-2 justify-center">
+                            <Icon name="ShieldCheck" size={16} />
+                            Проверить соответствие
+                          </span>
+                        )}
+                      </Button>
+
+                      {/* Результат */}
+                      {checkResult === "ok" && (
+                        <div className="mt-3 bg-[#1e3a2f] border border-[#3ba55c] rounded-lg p-3">
+                          <div className="flex items-center gap-2 mb-2">
+                            <Icon name="CheckCircle2" size={16} className="text-[#3ba55c]" />
+                            <span className="text-[#3ba55c] font-semibold text-sm">Соответствует требованиям</span>
+                          </div>
+                          <p className="text-[#b9bbbe] text-xs">
+                            RAG-агент проверил строку по загруженным документам. Нарушений нормативных требований не выявлено. Строка допускается к использованию.
+                          </p>
+                          <div className="mt-2 flex items-center gap-1 text-[#72767d] text-xs">
+                            <Icon name="BookOpen" size={12} />
+                            <span>Проверено по 3 документам · 12 релевантных фрагментов</span>
+                          </div>
+                        </div>
+                      )}
+                      {checkResult === "fail" && (
+                        <div className="mt-3 bg-[#3a1e1e] border border-[#ed4245] rounded-lg p-3">
+                          <div className="flex items-center gap-2 mb-2">
+                            <Icon name="XCircle" size={16} className="text-[#ed4245]" />
+                            <span className="text-[#ed4245] font-semibold text-sm">Несоответствие обнаружено</span>
+                          </div>
+                          <p className="text-[#b9bbbe] text-xs">
+                            Строка не соответствует требованиям раздела 3.2 регламента. RAG-агент нашёл противоречие с нормой: значение выходит за допустимые пределы.
+                          </p>
+                          <div className="mt-2 flex items-center gap-1 text-[#72767d] text-xs">
+                            <Icon name="BookOpen" size={12} />
+                            <span>Источник: Технический регламент №47, п. 3.2.1</span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
 
-              {/* Секция "Начало работы" */}
-              <div className="bg-[#2f3136] border border-[#202225] rounded-lg p-4 sm:p-6 mt-6 sm:mt-8">
+              {/* Сообщение второго пользователя */}
+              <div className="flex gap-2 sm:gap-4">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-green-500 to-teal-500 rounded-full flex items-center justify-center flex-shrink-0">
+                  <span className="text-white text-xs sm:text-sm font-medium">Р</span>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-baseline gap-2 mb-1">
+                    <span className="text-white font-medium text-sm sm:text-base">Руководитель отдела</span>
+                    <span className="text-[#72767d] text-xs hidden sm:inline">Сегодня в 09:15</span>
+                  </div>
+                  <div className="text-[#dcddde] text-sm sm:text-base">
+                    Отличная система — раньше такая проверка занимала несколько часов вручную 🔥
+                  </div>
+                </div>
+              </div>
+
+              {/* Как начать */}
+              <div className="bg-[#2f3136] border border-[#202225] rounded-lg p-4 sm:p-6 mt-2">
                 <h2 className="text-xl sm:text-2xl font-bold text-white mb-4 flex items-center gap-2">
-                  <Download className="w-5 h-5 sm:w-6 sm:h-6 text-[#5865f2]" />
-                  Начни работу с Дискордик
+                  <Icon name="Rocket" size={22} className="text-[#5865f2]" />
+                  Как начать работу с VeriDoc AI
                 </h2>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-4 sm:mb-6">
@@ -349,71 +353,73 @@ const Index = () => {
                     <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#5865f2] rounded-full flex items-center justify-center mx-auto mb-3">
                       <span className="text-white font-bold text-sm sm:text-base">1</span>
                     </div>
-                    <h3 className="text-white font-medium mb-2 text-sm sm:text-base">Скачай приложение</h3>
-                    <p className="text-[#b9bbbe] text-xs sm:text-sm">Получи Дискордик для Windows, macOS или Linux</p>
+                    <h3 className="text-white font-medium mb-2 text-sm sm:text-base">Загрузите документы</h3>
+                    <p className="text-[#b9bbbe] text-xs sm:text-sm">Добавьте нормативные акты, регламенты и стандарты в базу знаний RAG-агента</p>
                   </div>
                   <div className="text-center">
                     <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#5865f2] rounded-full flex items-center justify-center mx-auto mb-3">
                       <span className="text-white font-bold text-sm sm:text-base">2</span>
                     </div>
-                    <h3 className="text-white font-medium mb-2 text-sm sm:text-base">Авторизуй Discord</h3>
-                    <p className="text-[#b9bbbe] text-xs sm:text-sm">Подключись безопасно через OAuth</p>
+                    <h3 className="text-white font-medium mb-2 text-sm sm:text-base">Введите строку</h3>
+                    <p className="text-[#b9bbbe] text-xs sm:text-sm">Вставьте данные или текст, которые нужно проверить на соответствие требованиям</p>
                   </div>
                   <div className="text-center">
                     <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#5865f2] rounded-full flex items-center justify-center mx-auto mb-3">
                       <span className="text-white font-bold text-sm sm:text-base">3</span>
                     </div>
-                    <h3 className="text-white font-medium mb-2 text-sm sm:text-base">Начни дизайнить</h3>
-                    <p className="text-[#b9bbbe] text-xs sm:text-sm">Открой Figma и смотри как работает магия</p>
+                    <h3 className="text-white font-medium mb-2 text-sm sm:text-base">Получите вердикт</h3>
+                    <p className="text-[#b9bbbe] text-xs sm:text-sm">ИИ-агент анализирует и выдаёт заключение с обоснованием и ссылкой на норму</p>
                   </div>
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                   <Button className="bg-[#5865f2] hover:bg-[#4752c4] text-white px-6 sm:px-8 py-2 sm:py-3 rounded text-sm font-medium">
-                    <Download className="w-4 h-4 mr-2" />
-                    Скачать Дискордик
+                    <Icon name="Upload" size={16} className="mr-2" />
+                    Загрузить документы
                   </Button>
                   <Button
                     variant="outline"
                     className="border-[#4f545c] text-[#b9bbbe] hover:bg-[#40444b] hover:border-[#6d6f78] px-6 sm:px-8 py-2 sm:py-3 rounded text-sm font-medium bg-transparent"
                   >
-                    <Shield className="w-4 h-4 mr-2" />
-                    Авторизовать Discord
+                    <Icon name="BookOpen" size={16} className="mr-2" />
+                    Документация
                   </Button>
                 </div>
               </div>
 
               {/* Преимущества */}
               <div className="bg-[#2f3136] border border-[#202225] rounded-lg p-4 sm:p-6">
-                <h3 className="text-lg sm:text-xl font-bold text-white mb-4">Почему Дискордик?</h3>
+                <h3 className="text-lg sm:text-xl font-bold text-white mb-4">Почему VeriDoc AI?</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   {[
                     {
-                      icon: <Zap className="w-4 h-4 sm:w-5 sm:h-5" />,
-                      title: "Автоопределение",
-                      desc: "Работает с приложением и браузером",
+                      icon: "Zap",
+                      title: "Мгновенный ответ",
+                      desc: "Анализ за секунды вместо часов ручной проверки",
                     },
                     {
-                      icon: <Eye className="w-4 h-4 sm:w-5 sm:h-5" />,
-                      title: "Умное отслеживание",
-                      desc: "Показывает имена проектов и статус",
+                      icon: "FileSearch",
+                      title: "Точный поиск по документам",
+                      desc: "RAG-агент находит релевантные нормы среди тысяч страниц",
                     },
                     {
-                      icon: <Clock className="w-4 h-4 sm:w-5 sm:h-5" />,
-                      title: "Обновление в реальном времени",
-                      desc: "Синхронизация каждые 5 секунд",
+                      icon: "ShieldCheck",
+                      title: "Обоснованный вердикт",
+                      desc: "Каждый ответ со ссылкой на конкретный пункт документа",
                     },
                     {
-                      icon: <Shield className="w-4 h-4 sm:w-5 sm:h-5" />,
-                      title: "Приватность прежде всего",
-                      desc: "Никакого сбора данных",
+                      icon: "RefreshCw",
+                      title: "Актуальная база",
+                      desc: "Добавляйте и обновляйте документы в любой момент",
                     },
                   ].map((feature, index) => (
                     <div
                       key={index}
                       className="flex items-start gap-2 sm:gap-3 p-2 sm:p-3 rounded hover:bg-[#36393f] transition-colors"
                     >
-                      <div className="text-[#5865f2] mt-0.5">{feature.icon}</div>
+                      <div className="text-[#5865f2] mt-0.5">
+                        <Icon name={feature.icon} size={18} />
+                      </div>
                       <div>
                         <div className="text-white font-medium text-xs sm:text-sm">{feature.title}</div>
                         <div className="text-[#b9bbbe] text-xs sm:text-sm">{feature.desc}</div>
@@ -424,28 +430,39 @@ const Index = () => {
               </div>
             </div>
 
-            {/* Поле ввода сообщения */}
+            {/* Поле ввода (декоративное) */}
             <div className="p-2 sm:p-4">
-              <div className="bg-[#40444b] rounded-lg px-3 sm:px-4 py-2 sm:py-3">
-                <div className="text-[#72767d] text-xs sm:text-sm">Сообщение #витрина</div>
+              <div className="bg-[#40444b] rounded-lg px-3 sm:px-4 py-2 sm:py-3 flex items-center gap-2 text-[#72767d] text-xs sm:text-sm">
+                <Icon name="MessageSquarePlus" size={16} />
+                Сообщение #верификация
               </div>
             </div>
           </div>
 
-          {/* Боковая панель участников - скрыта на мобильных/планшетах */}
+          {/* Боковая панель участников */}
           <div className="hidden xl:block w-60 bg-[#2f3136] p-4">
             <div className="mb-4">
-              <h3 className="text-[#8e9297] text-xs font-semibold uppercase tracking-wide mb-2">В сети - 3</h3>
+              <h3 className="text-[#8e9297] text-xs font-semibold uppercase tracking-wide mb-2">Активные пользователи — 3</h3>
               <div className="space-y-2">
                 {[
                   {
-                    name: "Мария Дизайнер",
-                    status: "Работает в Figma",
-                    avatar: "М",
-                    color: "from-purple-500 to-pink-500",
+                    name: "Инженер по качеству",
+                    status: "Проверяет данные",
+                    avatar: "И",
+                    color: "from-purple-500 to-indigo-500",
                   },
-                  { name: "Иван UX", status: "В сети", avatar: "И", color: "from-green-500 to-blue-500" },
-                  { name: "Алексей", status: "Разрабатывает Дискордик", avatar: "А", color: "from-blue-500 to-purple-500" },
+                  {
+                    name: "Руководитель отдела",
+                    status: "Просматривает отчёт",
+                    avatar: "Р",
+                    color: "from-green-500 to-teal-500",
+                  },
+                  {
+                    name: "Администратор",
+                    status: "Загружает документы",
+                    avatar: "А",
+                    color: "from-blue-500 to-purple-500",
+                  },
                 ].map((user, index) => (
                   <div key={index} className="flex items-center gap-3 p-2 rounded hover:bg-[#36393f] cursor-pointer">
                     <div
@@ -458,6 +475,26 @@ const Index = () => {
                       <div className="text-white text-sm font-medium truncate">{user.name}</div>
                       <div className="text-[#b9bbbe] text-xs truncate">{user.status}</div>
                     </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Статус системы */}
+            <div className="mt-6">
+              <h3 className="text-[#8e9297] text-xs font-semibold uppercase tracking-wide mb-3">Статус системы</h3>
+              <div className="space-y-2">
+                {[
+                  { label: "RAG-агент", ok: true },
+                  { label: "База документов", ok: true },
+                  { label: "ИИ-модель", ok: true },
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center justify-between text-xs">
+                    <span className="text-[#b9bbbe]">{item.label}</span>
+                    <span className={`flex items-center gap-1 ${item.ok ? "text-[#3ba55c]" : "text-[#ed4245]"}`}>
+                      <span className={`w-2 h-2 rounded-full ${item.ok ? "bg-[#3ba55c]" : "bg-[#ed4245]"} animate-pulse`}></span>
+                      {item.ok ? "Активен" : "Ошибка"}
+                    </span>
                   </div>
                 ))}
               </div>
